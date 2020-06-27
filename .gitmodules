@@ -1,0 +1,3 @@
+[submodule "src/main/resources/pagila-original"]
+	path = src/main/resources/pagila-original
+	url = https://github.com/devrimgunduz/pagila
