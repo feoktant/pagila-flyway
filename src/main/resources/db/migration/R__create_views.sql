@@ -8,10 +8,10 @@ SELECT a.actor_id,
                                                                           JOIN film_actor fa_1 ON ((f.film_id = fa_1.film_id)))
                                                                  WHERE ((fc_1.category_id = c.category_id) AND (fa_1.actor_id = a.actor_id))
                                                                  GROUP BY fa_1.actor_id))) AS film_info
-FROM (((actor a
-    LEFT JOIN film_actor fa ON ((a.actor_id = fa.actor_id)))
-    LEFT JOIN film_category fc ON ((fa.film_id = fc.film_id)))
-         LEFT JOIN category c ON ((fc.category_id = c.category_id)))
+FROM actor a
+         LEFT JOIN film_actor fa USING (actor_id)
+         LEFT JOIN film_category fc USING (film_id)
+         LEFT JOIN category c USING (category_id)
 GROUP BY a.actor_id, a.first_name, a.last_name;
 
 
@@ -28,10 +28,10 @@ SELECT cu.customer_id                                                 AS id,
            ELSE ''::text
            END                                                        AS notes,
        cu.store_id                                                    AS sid
-FROM (((customer cu
-    JOIN address a ON ((cu.address_id = a.address_id)))
-    JOIN city ON ((a.city_id = city.city_id)))
-         JOIN country ON ((city.country_id = country.country_id)));
+FROM customer cu
+         JOIN address a USING (address_id)
+         JOIN city USING (city_id)
+         JOIN country USING (country_id);
 
 
 CREATE OR REPLACE VIEW film_list AS
@@ -43,11 +43,11 @@ SELECT film.film_id                                                             
        film.length,
        film.rating,
        group_concat((((actor.first_name)::text || ' '::text) || (actor.last_name)::text)) AS actors
-FROM ((((category
-    LEFT JOIN film_category ON ((category.category_id = film_category.category_id)))
-    LEFT JOIN film ON ((film_category.film_id = film.film_id)))
-    JOIN film_actor ON ((film.film_id = film_actor.film_id)))
-         JOIN actor ON ((film_actor.actor_id = actor.actor_id)))
+FROM category
+         LEFT JOIN film_category USING (category_id)
+         LEFT JOIN film USING (film_id)
+         JOIN film_actor USING (film_id)
+         JOIN actor USING (actor_id)
 GROUP BY film.film_id, film.title, film.description, category.name, film.rental_rate, film.length, film.rating;
 
 
@@ -63,39 +63,39 @@ SELECT film.film_id                                                   AS fid,
                        lower("substring"((actor.first_name)::text, 2))) ||
                       upper("substring"((actor.last_name)::text, 1, 1))) ||
                      lower("substring"((actor.last_name)::text, 2)))) AS actors
-FROM ((((category
-    LEFT JOIN film_category ON ((category.category_id = film_category.category_id)))
-    LEFT JOIN film ON ((film_category.film_id = film.film_id)))
-    JOIN film_actor ON ((film.film_id = film_actor.film_id)))
-         JOIN actor ON ((film_actor.actor_id = actor.actor_id)))
+FROM category
+         LEFT JOIN film_category USING (category_id)
+         LEFT JOIN film USING (film_id)
+         JOIN film_actor USING (film_id)
+         JOIN actor USING (actor_id)
 GROUP BY film.film_id, film.title, film.description, category.name, film.rental_rate, film.length, film.rating;
 
 
 CREATE OR REPLACE VIEW sales_by_film_category AS
 SELECT c.name        AS category,
        sum(p.amount) AS total_sales
-FROM (((((payment p
-    JOIN rental r ON ((p.rental_id = r.rental_id)))
-    JOIN inventory i ON ((r.inventory_id = i.inventory_id)))
-    JOIN film f ON ((i.film_id = f.film_id)))
-    JOIN film_category fc ON ((f.film_id = fc.film_id)))
-         JOIN category c ON ((fc.category_id = c.category_id)))
+FROM payment p
+         JOIN rental r USING (rental_id)
+         JOIN inventory i USING (inventory_id)
+         JOIN film f USING (film_id)
+         JOIN film_category fc USING (film_id)
+         JOIN category c USING (category_id)
 GROUP BY c.name
-ORDER BY (sum(p.amount)) DESC;
+ORDER BY total_sales DESC;
 
 
 CREATE OR REPLACE VIEW sales_by_store AS
 SELECT (((c.city)::text || ','::text) || (cy.country)::text)        AS store,
        (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,
        sum(p.amount)                                                AS total_sales
-FROM (((((((payment p
-    JOIN rental r ON ((p.rental_id = r.rental_id)))
-    JOIN inventory i ON ((r.inventory_id = i.inventory_id)))
-    JOIN store s ON ((i.store_id = s.store_id)))
-    JOIN address a ON ((s.address_id = a.address_id)))
-    JOIN city c ON ((a.city_id = c.city_id)))
-    JOIN country cy ON ((c.country_id = cy.country_id)))
-         JOIN staff m ON ((s.manager_staff_id = m.staff_id)))
+FROM payment p
+         JOIN rental r USING (rental_id)
+         JOIN inventory i USING (inventory_id)
+         JOIN store s USING (store_id)
+         JOIN address a USING (address_id)
+         JOIN city c USING (city_id)
+         JOIN country cy USING (country_id)
+         JOIN staff m ON s.manager_staff_id = m.staff_id
 GROUP BY cy.country, c.city, s.store_id, m.first_name, m.last_name
 ORDER BY cy.country, c.city;
 
@@ -109,7 +109,7 @@ SELECT s.staff_id                                                   AS id,
        city.city,
        country.country,
        s.store_id                                                   AS sid
-FROM (((staff s
-    JOIN address a ON ((s.address_id = a.address_id)))
-    JOIN city ON ((a.city_id = city.city_id)))
-         JOIN country ON ((city.country_id = country.country_id)));
+FROM staff s
+         JOIN address a USING (address_id)
+         JOIN city USING (city_id)
+         JOIN country USING (country_id);
