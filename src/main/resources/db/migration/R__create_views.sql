@@ -16,18 +16,18 @@ GROUP BY a.actor_id, a.first_name, a.last_name;
 
 
 CREATE OR REPLACE VIEW customer_list AS
-SELECT cu.customer_id                                                 AS id,
-       (((cu.first_name)::text || ' '::text) || (cu.last_name)::text) AS name,
+SELECT cu.customer_id                       AS id,
+       cu.first_name || ' ' || cu.last_name AS name,
        a.address,
-       a.postal_code                                                  AS "zip code",
+       a.postal_code                        AS "zip code",
        a.phone,
        city.city,
        country.country,
        CASE
-           WHEN cu.activebool THEN 'active'::text
-           ELSE ''::text
-           END                                                        AS notes,
-       cu.store_id                                                    AS sid
+           WHEN cu.activebool THEN 'active'
+           ELSE ''
+           END                              AS notes,
+       cu.store_id                          AS sid
 FROM customer cu
          JOIN address a USING (address_id)
          JOIN city USING (city_id)
@@ -35,14 +35,14 @@ FROM customer cu
 
 
 CREATE OR REPLACE VIEW film_list AS
-SELECT film.film_id                                                                       AS fid,
+SELECT film.film_id                                             AS fid,
        film.title,
        film.description,
-       category.name                                                                      AS category,
-       film.rental_rate                                                                   AS price,
+       category.name                                            AS category,
+       film.rental_rate                                         AS price,
        film.length,
        film.rating,
-       group_concat((((actor.first_name)::text || ' '::text) || (actor.last_name)::text)) AS actors
+       group_concat(actor.first_name || ' ' || actor.last_name) AS actors
 FROM category
          LEFT JOIN film_category USING (category_id)
          LEFT JOIN film USING (film_id)
@@ -85,9 +85,9 @@ ORDER BY total_sales DESC;
 
 
 CREATE OR REPLACE VIEW sales_by_store AS
-SELECT (((c.city)::text || ','::text) || (cy.country)::text)        AS store,
-       (((m.first_name)::text || ' '::text) || (m.last_name)::text) AS manager,
-       sum(p.amount)                                                AS total_sales
+SELECT c.city || ', ' || cy.country       AS store,
+       m.first_name || ' ' || m.last_name AS manager,
+       sum(p.amount)                      AS total_sales
 FROM payment p
          JOIN rental r USING (rental_id)
          JOIN inventory i USING (inventory_id)
@@ -101,14 +101,14 @@ ORDER BY cy.country, c.city;
 
 
 CREATE OR REPLACE VIEW staff_list AS
-SELECT s.staff_id                                                   AS id,
-       (((s.first_name)::text || ' '::text) || (s.last_name)::text) AS name,
+SELECT s.staff_id                         AS id,
+       s.first_name || ' ' || s.last_name AS name,
        a.address,
-       a.postal_code                                                AS "zip code",
+       a.postal_code                      AS "zip code",
        a.phone,
        city.city,
        country.country,
-       s.store_id                                                   AS sid
+       s.store_id                         AS sid
 FROM staff s
          JOIN address a USING (address_id)
          JOIN city USING (city_id)

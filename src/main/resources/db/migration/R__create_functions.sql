@@ -145,15 +145,16 @@ SELECT CASE
 $_$;
 
 
-CREATE OR REPLACE FUNCTION last_updated() RETURNS trigger
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-    NEW.last_update = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END
-$$;
+-- TODO we use this in other script
+-- CREATE OR REPLACE FUNCTION last_updated() RETURNS trigger
+--     LANGUAGE plpgsql
+-- AS
+-- $$
+-- BEGIN
+--     NEW.last_update = CURRENT_TIMESTAMP;
+--     RETURN NEW;
+-- END
+-- $$;
 
 
 CREATE FUNCTION rewards_report(min_monthly_purchases integer,
