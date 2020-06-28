@@ -2,12 +2,12 @@ CREATE OR REPLACE VIEW actor_info AS
 SELECT a.actor_id,
        a.first_name,
        a.last_name,
-       group_concat(DISTINCT (((c.name)::text || ': '::text) || (SELECT group_concat((f.title)::text) AS group_concat
-                                                                 FROM ((film f
-                                                                     JOIN film_category fc_1 ON ((f.film_id = fc_1.film_id)))
-                                                                          JOIN film_actor fa_1 ON ((f.film_id = fa_1.film_id)))
-                                                                 WHERE ((fc_1.category_id = c.category_id) AND (fa_1.actor_id = a.actor_id))
-                                                                 GROUP BY fa_1.actor_id))) AS film_info
+       string_agg(DISTINCT c.name || ': ' || (SELECT string_agg(f.title, ', ')
+                                              FROM film f
+                                                       JOIN film_category fc_1 USING (film_id)
+                                                       JOIN film_actor fa_1 USING (film_id)
+                                              WHERE ((fc_1.category_id = c.category_id) AND (fa_1.actor_id = a.actor_id))
+                                              GROUP BY fa_1.actor_id), ', ') AS film_info
 FROM actor a
          LEFT JOIN film_actor fa USING (actor_id)
          LEFT JOIN film_category fc USING (film_id)
@@ -35,14 +35,14 @@ FROM customer cu
 
 
 CREATE OR REPLACE VIEW film_list AS
-SELECT film.film_id                                             AS fid,
+SELECT film.film_id                                                 AS fid,
        film.title,
        film.description,
-       category.name                                            AS category,
-       film.rental_rate                                         AS price,
+       category.name                                                AS category,
+       film.rental_rate                                             AS price,
        film.length,
        film.rating,
-       group_concat(actor.first_name || ' ' || actor.last_name) AS actors
+       string_agg(actor.first_name || ' ' || actor.last_name, ', ') AS actors
 FROM category
          LEFT JOIN film_category USING (category_id)
          LEFT JOIN film USING (film_id)
@@ -52,17 +52,16 @@ GROUP BY film.film_id, film.title, film.description, category.name, film.rental_
 
 
 CREATE OR REPLACE VIEW nicer_but_slower_film_list AS
-SELECT film.film_id                                                   AS fid,
+SELECT film.film_id     AS fid,
        film.title,
        film.description,
-       category.name                                                  AS category,
-       film.rental_rate                                               AS price,
+       category.name    AS category,
+       film.rental_rate AS price,
        film.length,
        film.rating,
-       group_concat((((upper("substring"((actor.first_name)::text, 1, 1)) ||
-                       lower("substring"((actor.first_name)::text, 2))) ||
-                      upper("substring"((actor.last_name)::text, 1, 1))) ||
-                     lower("substring"((actor.last_name)::text, 2)))) AS actors
+       string_agg(
+               initcap(concat(actor.first_name, ' ', actor.last_name)),
+               ', ')    AS actors
 FROM category
          LEFT JOIN film_category USING (category_id)
          LEFT JOIN film USING (film_id)
