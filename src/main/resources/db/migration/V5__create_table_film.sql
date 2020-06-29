@@ -11,8 +11,8 @@ CREATE TABLE film
     length               SMALLINT,
     replacement_cost     NUMERIC(5, 2) DEFAULT 19.99                                      NOT NULL,
     rating               mpaa_rating   DEFAULT 'G',
-    last_update          TIMESTAMPTZ   DEFAULT now()                                      NOT NULL,
     special_features     TEXT[], -- SET('Trailers','Commentaries','Deleted Scenes','Behind the Scenes')
+    last_update          TIMESTAMPTZ   DEFAULT now()                                      NOT NULL,
     fulltext             TSVECTOR                                                         NOT NULL
 );
 
