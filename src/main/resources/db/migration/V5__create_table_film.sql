@@ -16,12 +16,6 @@ CREATE TABLE film
     fulltext             TSVECTOR                                                         NOT NULL
 );
 
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON film
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();
-
 CREATE TRIGGER film_fulltext_trigger
     BEFORE INSERT OR UPDATE
     ON film

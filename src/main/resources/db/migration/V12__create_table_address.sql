@@ -12,9 +12,3 @@ CREATE TABLE address
 
 CREATE INDEX idx_fk_city_id
     ON address (city_id);
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON address
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();

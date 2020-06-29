@@ -9,9 +9,3 @@ CREATE TABLE rental
     last_update  TIMESTAMPTZ DEFAULT now()                                         NOT NULL,
     CONSTRAINT unq_rental_rental_date_inventory_id_customer_id_idx UNIQUE (rental_date, inventory_id, customer_id)
 );
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON rental
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();

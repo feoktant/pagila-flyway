@@ -1,9 +1,0 @@
-CREATE FUNCTION last_updated() RETURNS TRIGGER
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-    NEW.last_update = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END
-$$;

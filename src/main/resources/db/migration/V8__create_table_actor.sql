@@ -8,9 +8,3 @@ CREATE TABLE actor
 
 CREATE INDEX idx_actor_last_name
     ON actor (last_name);
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON actor
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();

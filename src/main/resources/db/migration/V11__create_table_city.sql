@@ -8,11 +8,3 @@ CREATE TABLE city
 
 CREATE INDEX idx_fk_country_id
     ON city (country_id);
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON city
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();
-
-

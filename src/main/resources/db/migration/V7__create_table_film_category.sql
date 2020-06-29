@@ -5,9 +5,3 @@ CREATE TABLE film_category
     last_update TIMESTAMPTZ DEFAULT now() NOT NULL,
     PRIMARY KEY (film_id, category_id)
 );
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON film_category
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();

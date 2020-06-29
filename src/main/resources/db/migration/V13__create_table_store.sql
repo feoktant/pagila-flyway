@@ -6,9 +6,3 @@ CREATE TABLE store
     last_update      TIMESTAMPTZ DEFAULT now()                                       NOT NULL,
     CONSTRAINT unq_manager_staff_id_idx UNIQUE (manager_staff_id)
 );
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON store
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();

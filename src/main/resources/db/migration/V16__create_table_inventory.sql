@@ -8,9 +8,3 @@ CREATE TABLE inventory
 
 CREATE INDEX idx_store_id_film_id
     ON inventory (store_id, film_id);
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON inventory
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();

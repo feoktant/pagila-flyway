@@ -12,9 +12,3 @@ CREATE TABLE staff
     last_update TIMESTAMPTZ DEFAULT now()                                       NOT NULL,
     picture     BYTEA
 );
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON staff
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();

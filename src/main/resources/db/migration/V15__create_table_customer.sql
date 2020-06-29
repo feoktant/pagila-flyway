@@ -11,9 +11,3 @@ CREATE TABLE customer
     last_update TIMESTAMPTZ DEFAULT now(), -- TODO why it is nullable?
     active      INTEGER
 );
-
-CREATE TRIGGER last_updated
-    BEFORE UPDATE
-    ON customer
-    FOR EACH ROW
-EXECUTE PROCEDURE last_updated();
