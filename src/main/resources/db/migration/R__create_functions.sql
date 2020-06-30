@@ -130,19 +130,11 @@ END
 $$;
 
 
-CREATE OR REPLACE FUNCTION last_day(timestamp with time zone) RETURNS date
-    LANGUAGE sql
-    IMMUTABLE STRICT
-AS
-$_$
-SELECT CASE
-           WHEN EXTRACT(MONTH FROM $1) = 12 THEN
-               (((EXTRACT(YEAR FROM $1) + 1) operator (pg_catalog.||) '-01-01')::date - INTERVAL '1 day')::date
-           ELSE
-               ((EXTRACT(YEAR FROM $1) operator (pg_catalog.||) '-' operator (pg_catalog.||)
-                 (EXTRACT(MONTH FROM $1) + 1) operator (pg_catalog.||) '-01')::date - INTERVAL '1 day')::date
-           END
-$_$;
+CREATE OR REPLACE FUNCTION last_day(TIMESTAMPTZ) RETURNS DATE AS
+$$
+SELECT (date_trunc('MONTH', $1) + INTERVAL '1 MONTH - 1 day')::DATE;
+$$ LANGUAGE 'sql' IMMUTABLE
+                  STRICT;
 
 
 CREATE FUNCTION rewards_report(min_monthly_purchases integer,
@@ -170,7 +162,7 @@ BEGIN
     last_month_start :=
             to_date((extract(YEAR FROM last_month_start) || '-' || extract(MONTH FROM last_month_start) || '-01'),
                     'YYYY-MM-DD');
-    last_month_end := LAST_DAY(last_month_start);
+    last_month_end := last_day(last_month_start);
 
     /*
     Create a temporary storage area for Customer IDs.
