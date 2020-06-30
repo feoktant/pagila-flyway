@@ -203,3 +203,14 @@ BEGIN
     RETURN;
 END
 $_$;
+
+
+CREATE OR REPLACE FUNCTION last_updated() RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    NEW.last_update = NOW();
+    RETURN NEW;
+END
+$$;
