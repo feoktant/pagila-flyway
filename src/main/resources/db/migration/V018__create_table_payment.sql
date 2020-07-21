@@ -1,6 +1,6 @@
 CREATE TABLE payment
 (
-    payment_id   SERIAL,
+    payment_id   UUID,
     customer_id  INTEGER REFERENCES customer NOT NULL,
     staff_id     SMALLINT REFERENCES staff   NOT NULL,
     rental_id    INTEGER REFERENCES rental   NOT NULL,
