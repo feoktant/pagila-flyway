@@ -6,5 +6,4 @@ CREATE TABLE film_actor
     PRIMARY KEY (actor_id, film_id)
 );
 
-CREATE INDEX idx_fk_film_id
-    ON film_actor (film_id);
+CREATE INDEX ON film_actor (film_id);

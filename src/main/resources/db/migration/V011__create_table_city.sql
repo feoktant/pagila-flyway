@@ -6,5 +6,4 @@ CREATE TABLE city
     last_update TIMESTAMPTZ DEFAULT now()                                       NOT NULL
 );
 
-CREATE INDEX idx_fk_country_id
-    ON city (country_id);
+CREATE INDEX ON city (country_id);

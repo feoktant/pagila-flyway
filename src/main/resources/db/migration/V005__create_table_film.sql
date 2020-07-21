@@ -22,14 +22,7 @@ CREATE TRIGGER film_fulltext_trigger
     FOR EACH ROW
 EXECUTE PROCEDURE tsvector_update_trigger('fulltext', 'pg_catalog.english', 'title', 'description');
 
-CREATE INDEX film_fulltext_idx
-    ON film (fulltext);
-
-CREATE INDEX idx_title
-    ON film (title);
-
-CREATE INDEX idx_fk_language_id
-    ON film (language_id);
-
-CREATE INDEX idx_fk_original_language_id
-    ON film (original_language_id);
+CREATE INDEX ON film (fulltext);
+CREATE INDEX ON film (title);
+CREATE INDEX ON film (language_id);
+CREATE INDEX ON film (original_language_id);

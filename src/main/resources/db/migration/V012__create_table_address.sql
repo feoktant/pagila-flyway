@@ -10,5 +10,4 @@ CREATE TABLE address
     last_update TIMESTAMPTZ DEFAULT now()                                    NOT NULL
 );
 
-CREATE INDEX idx_fk_city_id
-    ON address (city_id);
+CREATE INDEX ON address (city_id);

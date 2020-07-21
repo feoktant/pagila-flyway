@@ -6,5 +6,4 @@ CREATE TABLE actor
     last_update TIMESTAMPTZ DEFAULT now() NOT NULL
 );
 
-CREATE INDEX idx_actor_last_name
-    ON actor (last_name);
+CREATE INDEX ON actor (last_name);

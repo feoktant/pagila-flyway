@@ -6,5 +6,4 @@ CREATE TABLE inventory
     last_update  TIMESTAMPTZ DEFAULT now()                                      NOT NULL
 );
 
-CREATE INDEX idx_store_id_film_id
-    ON inventory (store_id, film_id);
+CREATE INDEX ON inventory (store_id, film_id);
