@@ -1,6 +1,6 @@
 *.iml
 .idea
 target/
-project/
+project/target/
 
 src/main/resources/pagila-original/
