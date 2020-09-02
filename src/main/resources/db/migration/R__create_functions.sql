@@ -137,8 +137,8 @@ $$ LANGUAGE 'sql' IMMUTABLE
                   STRICT;
 
 
-CREATE FUNCTION rewards_report(min_monthly_purchases integer,
-                               min_dollar_amount_purchased numeric) RETURNS SETOF customer
+CREATE OR REPLACE FUNCTION rewards_report(min_monthly_purchases integer,
+                                          min_dollar_amount_purchased numeric) RETURNS SETOF customer
     LANGUAGE plpgsql
     SECURITY DEFINER
 AS
