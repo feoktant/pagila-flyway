@@ -99,7 +99,9 @@ GROUP BY cy.country, c.city, s.store_id, m.first_name, m.last_name
 ORDER BY cy.country, c.city;
 
 
-CREATE OR REPLACE VIEW staff_list AS
+DROP VIEW IF EXISTS staff_list;
+
+CREATE OR REPLACE VIEW staff_list_copy AS
 SELECT s.staff_id                         AS id,
        s.first_name || ' ' || s.last_name AS name,
        a.address,
